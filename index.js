@@ -66,18 +66,11 @@ app.get("/", async(req, res) => {
 })
 
 app.get("/login", (req, res) => {
-  if(req.user) {
-    console.log("hello");
-    
-    res.status(200).json({
-      success: true,
-      user: req.user
-    })
-  }else{
-    console.log("nooo");
-    
-    res.send(null);
+  if (!req.user) {
+    return res.status(401).json({ error: "User not authenticated" });
   }
+
+  res.json(req.user);
 })
 
 app.get("/logout", (req, res, next) => {
