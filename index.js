@@ -53,6 +53,10 @@ app.use(cors({
   resave: false,
   maxAge: 1000,
 }))
+app.use((req, res, next) => {
+  res.setHeader("Access-control-Allow-origin","*");
+  next();
+})
 app.use(passport.initialize());
 app.use(passport.session());
 
