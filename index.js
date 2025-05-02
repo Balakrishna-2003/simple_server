@@ -51,7 +51,6 @@ app.use(cors({
   methods: ['GET', 'POST'],
   credentials: true,
   resave: false,
-  maxAge: 1000,
 }))
 app.use(passport.initialize());
 app.use(passport.session());
