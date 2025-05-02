@@ -51,9 +51,6 @@ app.use(express.json())
 app.use(urlencoded({ extended: true }))
 
 
-
-
-
 app.use(session({
   secret: "TOPSECRET",
   resave: false,
@@ -68,7 +65,7 @@ app.get("/", async(req, res) => {
   const {data, err} = await supabase.from('hello').select('*').filter("username", 'eq','hello');
   console.log(data &&  data.length);
   
-  console.log(req.user);
+  console.log(req.user+"hello");
   res.send(req.user);
 
 })
