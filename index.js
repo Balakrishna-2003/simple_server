@@ -21,7 +21,7 @@ const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const {data, error} = await supabase.from('hello').select('*');
-console.log(data.length);
+console.log(data &&  data.length);
 
 
 // const db = new pg.Client({
@@ -59,7 +59,7 @@ app.use(passport.session());
 
 app.get("/", async(req, res) => {
   const {data, err} = await supabase.from('hello').select('*').filter("username", 'eq','hello');
-  console.log(data.length);
+  console.log(data &&  data.length);
   
   console.log(req.user);
   res.send("hello world message from backend "+data);
@@ -101,7 +101,7 @@ app.post("/signup" , async (req, res) => {
     console.log('s');
     
     console.log(data);
-    if(data.length > 0){
+    if(data &&  data.length > 0){
       res.redirect(origin_url+'/');
     }else{
       bcrypt.hash(password, saltrounds, async (error, hash) => {
