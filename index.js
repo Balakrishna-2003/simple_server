@@ -78,7 +78,7 @@ app.get("/login", (req, res) => {
   if(req.user) {
     console.log("hello");
     const user = req.user;
-    res.json({success: true, user: user});
+    res.send({success: true, user: user});
   }else{
     console.log("nooo");
     
