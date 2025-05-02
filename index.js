@@ -74,6 +74,8 @@ app.get("/login", (req, res) => {
       user: req.user
     })
   }else{
+    console.log("nooo");
+    
     res.send(null);
   }
 })
