@@ -181,6 +181,8 @@ app.post("/login", (req,res, next) => {
         res.status(200).redirect(origin_url+"Home");
       })
     }else{
+      console.log('hhjkkj');
+      
       res.redirect(origin_url+'Login');
     };
   })(req, res, next);
