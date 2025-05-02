@@ -50,11 +50,14 @@ app.use(cors({
 app.use(express.json())
 app.use(urlencoded({ extended: true }))
 
+
+
+
+
 app.use(session({
   secret: "TOPSECRET",
   resave: false,
-  saveUninitialized: true
-
+  saveUninitialized: true,
 }))
 
 app.use(passport.initialize());
