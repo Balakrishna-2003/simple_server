@@ -66,18 +66,16 @@ app.get("/", async(req, res) => {
 })
 
 app.get("/login", (req, res) => {
-  res.status(200).json({
-        success: true,
-        user: req.user,
-      })
-  // if(req.user) {
-  //   res.status(200).json({
-  //     success: true,
-  //     user: req.user
-  //   })
-  // }else{
-  //   res.send(null);
-  // }
+  if(req.user) {
+    console.log("hello");
+    
+    res.status(200).json({
+      success: true,
+      user: req.user
+    })
+  }else{
+    res.send(null);
+  }
 })
 
 app.get("/logout", (req, res, next) => {
