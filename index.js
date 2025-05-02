@@ -61,7 +61,7 @@ app.get("/", async(req, res) => {
   console.log(data &&  data.length);
   
   console.log(req.user);
-  res.send("hello world message from backend dsfd  "+req.user);
+  res.send(req.user);
 
 })
 
