@@ -2,7 +2,7 @@ import express, { urlencoded } from 'express';
 import path from 'path'
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-import pg from 'pg';
+// import pg from 'pg';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy } from "passport-local";
