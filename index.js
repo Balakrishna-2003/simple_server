@@ -69,7 +69,7 @@ app.get("/login", (req, res) => {
   if(req.user) {
     console.log("hello");
     
-    res.send("ehll"+req.user);
+    res.json(req.user);
   }else{
     console.log("nooo");
     
