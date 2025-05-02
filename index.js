@@ -62,7 +62,7 @@ app.get("/", async(req, res) => {
   console.log(data.length);
   
   console.log(req.user);
-  res.send("hello world message from backend "+data[0].name);
+  res.send("hello world message from backend "+data);
 
 })
 
