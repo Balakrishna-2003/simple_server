@@ -161,7 +161,7 @@ app.post("/", async (req, res) => {
   // const ress = await db.query("INSERT INTO users values($1, $2);", [req.body.username, req.body.password]);
   const { data, error } = await supabase.from('hello').insert({username: req.body.username, password: req.body.password})
   // res.send(`hello world ${req.body.name} message from backend`);
-  res.redirect(origin_url+"Home")
+  res.status(200).redirect(origin_url+"Home")
 })
 
 app.post("/login", (req,res, next) => {
@@ -177,7 +177,8 @@ app.post("/login", (req,res, next) => {
         if(err) console.log(err);
         
         console.log("yes");
-        res.redirect(origin_url+"Home");
+        // res.send(JSON.parse(req));
+        res.status(200).redirect(origin_url+"Home");
       })
     }else{
       res.redirect(origin_url+'Login');
@@ -210,7 +211,7 @@ passport.use(
       
       const { data, error } = await supabase.from('hello').select().filter('username', 'eq',username);
       console.log(data);
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         const user = data[0];
         const storedHashedPassword = user.password;
         console.log(user);
