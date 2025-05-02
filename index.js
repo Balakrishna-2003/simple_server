@@ -185,9 +185,7 @@ app.post("/login", (req,res, next) => {
       
       res.redirect(origin_url+'Login');
     };
-  },(req,res)=>{
-    req.session.user = req.user;
- })(req, res, next);
+  })(req, res, next);
 })
 
 app.get("/auth/google",
