@@ -57,7 +57,7 @@ app.use(session({
   cookie: {
     secure: true,       // Set true if using HTTPS
     httpOnly: false,
-    sameSite: 'lax',     // Or 'none' if using cross-site cookies
+    sameSite: 'none',     // Or 'none' if using cross-site cookies
   }
 }))
 
