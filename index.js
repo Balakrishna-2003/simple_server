@@ -43,7 +43,6 @@ const origin_url = "http://localhost:5173/";
 
 app.use(cors({
   origin: 'http://localhost:5173',
-  methods: ['GET', 'POST'],
   credentials: true,
 }))
 
@@ -55,6 +54,11 @@ app.use(session({
   secret: "TOPSECRET",
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    secure: true,       // Set true if using HTTPS
+    httpOnly: false,
+    sameSite: 'lax',     // Or 'none' if using cross-site cookies
+  }
 }))
 
 app.use(passport.initialize());
@@ -180,8 +184,8 @@ app.post("/login", (req,res, next) => {
       // Authentication succeeded
       req.login(re, (err) => {
         if(err) console.log(err);
-        
         console.log("yes");
+        console.log(req.user);
         // res.send(JSON.parse(req));
         res.status(200).redirect(origin_url+"Home");
       })
