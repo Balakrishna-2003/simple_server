@@ -39,11 +39,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const origin_url = "http://localhost:5173/";
 
 
-app.use(session({
-  secret: "TOPSECRET",
-  resave: false,
-  saveUninitialized: true,
-}))
+
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -53,6 +49,12 @@ app.use(cors({
 
 app.use(express.json())
 app.use(urlencoded({ extended: true }))
+
+app.use(session({
+  secret: "TOPSECRET",
+  resave: false,
+  saveUninitialized: true,
+}))
 
 app.use(passport.initialize());
 app.use(passport.session());
