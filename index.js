@@ -66,7 +66,7 @@ app.get("/", async(req, res) => {
 })
 
 app.get("/login", (req, res) => {
-  res.send("d "+req.user);
+  res.send(req.user);
   // if(req.user) {
   //   res.status(200).json({
   //     success: true,
