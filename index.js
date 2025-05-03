@@ -71,7 +71,7 @@ app.get("/", async(req, res) => {
 })
 
 app.get("/login", (req, res) => {
-  const user = req.user;
+  const user = req;
 
   if(req.user) {
     console.log("hello");
@@ -79,7 +79,7 @@ app.get("/login", (req, res) => {
   }else{
     console.log("nooo");
     
-    res.json({success: false, user: req});
+    res.json({success: false, user: user});
   }
 })
 
