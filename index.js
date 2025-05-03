@@ -79,7 +79,7 @@ app.get("/login", (req, res) => {
   }else{
     console.log("nooo");
     
-    res.json({success: false, user: null});
+    res.json({success: false, user: req});
   }
 })
 
