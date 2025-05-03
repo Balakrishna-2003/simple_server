@@ -186,13 +186,13 @@ app.post("/login", (req,res, next) => {
         console.log("yes");
         console.log(req.user);
         // res.send(JSON.parse(req));
-        // res.status(200).redirect(origin_url+"Home");
-        res.send("login success");
+        res.status(200).redirect(origin_url+"Home");
+        // res.send("login success");
       })
     }else{
       console.log('hhjkkj');
-      re.send("login failed");
-      // res.redirect(origin_url+'Login');
+      // re.send("login failed");
+      res.redirect(origin_url+'Login');
     };
   })(req, res, next);
 })
