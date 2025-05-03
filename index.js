@@ -186,12 +186,13 @@ app.post("/login", (req,res, next) => {
         console.log("yes");
         console.log(req.user);
         // res.send(JSON.parse(req));
-        res.status(200).redirect(origin_url+"Home");
+        // res.status(200).redirect(origin_url+"Home");
+        res.send("login success");
       })
     }else{
       console.log('hhjkkj');
-      
-      res.redirect(origin_url+'Login');
+      re.send("login failed");
+      // res.redirect(origin_url+'Login');
     };
   })(req, res, next);
 })
@@ -208,7 +209,7 @@ app.get("/auth/google/secrets",
     "google",
     {
       successRedirect: origin_url,
-      failureRedirect: "https://simple-server1.vercel.app"
+      failureRedirect: process.env.API_URL
     } ));
 
 passport.use(
@@ -265,7 +266,7 @@ passport.use(
   new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://simple-server1.vercel.app/auth/google/secrets",
+    callbackURL: process.env.API_URL+"/auth/google/secrets",
     userprofileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
   },async (accessToken, refreshToken, profile, cb) => {
     console.log(profile);
