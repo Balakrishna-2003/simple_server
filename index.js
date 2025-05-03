@@ -54,7 +54,11 @@ app.use(session({
   secret: "TOPSECRET",
   resave: false,
   saveUninitialized: false,
-
+  cookie: {
+    secure: true,
+    httpOnly: false,
+    sameSite: 'none'
+  }
 }))
 
 app.use(passport.initialize());
@@ -66,7 +70,7 @@ app.get("/", async(req, res) => {
   console.log(data &&  data.length);
   
   console.log(req.user+" hello world");
-  res.send(req.user);
+  res.send(req.user+"hello world");
 
 })
 
@@ -79,7 +83,7 @@ app.get("/login", (req, res) => {
   }else{
     console.log("nooo");
     
-    res.json({success: false, user: user});
+    res.json({success: false, user: null});
   }
 })
 
