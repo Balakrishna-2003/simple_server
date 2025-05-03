@@ -77,15 +77,15 @@ app.get("/", async(req, res) => {
 app.get("/login", (req, res) => {
   const user = req.user;
   console.log(user);
-
-  if(req.user) {
-    console.log("hello");
-    res.json({success: true, user: req.user});
-  }else{
-    console.log("nooo");
+  res.json({success: true, user: req.user});
+  // if(req.user) {
+  //   console.log("hello");
+  //   res.json({success: true, user: req.user});
+  // }else{
+  //   console.log("nooo");
     
-    res.json({success: false, user: null});
-  }
+  //   res.json({success: false, user: null});
+  // }
 })
 
 app.get("/logout", (req, res, next) => {
