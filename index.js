@@ -52,7 +52,7 @@ app.use(urlencoded({ extended: true }))
 
 app.use(session({
   secret: "TOPSECRET",
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   cookie: {
     secure: false,
