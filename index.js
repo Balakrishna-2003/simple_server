@@ -36,13 +36,13 @@ console.log(data &&  data.length);
 
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const origin_url = "http://localhost:5173/";
+const origin_url = process.env.ORIGIN_URL+"/";
 
 
 
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.ORIGIN_URL,
   credentials: true,
 }))
 
