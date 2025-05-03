@@ -53,11 +53,10 @@ app.use(urlencoded({ extended: true }))
 app.use(session({
   secret: "TOPSECRET",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
-    secure: true,         // MUST be true for 'sameSite: none'
-    httpOnly: true,
-    sameSite: 'none'      // Required for cross-origin cookies
+    secure: true,
+    sameSite: 'lax'      // Required for cross-origin cookies
   }
 }))
 
@@ -69,7 +68,7 @@ app.get("/", async(req, res) => {
   const {data, err} = await supabase.from('hello').select('*').filter("username", 'eq','hello');
   console.log(data &&  data.length);
   
-  console.log(req.user+"hello");
+  console.log(req.user+" hello world");
   res.send(req.user);
 
 })
@@ -78,7 +77,7 @@ app.get("/login", (req, res) => {
   if(req.user) {
     console.log("hello");
     const user = req.user;
-    res.send({success: true, user: user});
+    res.json({success: true, user: user});
   }else{
     console.log("nooo");
     
