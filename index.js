@@ -39,7 +39,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const origin_url = process.env.ORIGIN_URL+"/";
 
 
-
+app.use(express.json())
+app.use(urlencoded({ extended: true }))
 
 app.use(cors({
   origin: process.env.ORIGIN_URL,
@@ -54,13 +55,12 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: true,
     httpOnly: true,
     sameSite: 'none'
   }
 }))
-app.use(express.json())
-app.use(urlencoded({ extended: true }))
+
 
 app.use(passport.initialize());
 app.use(passport.session());
