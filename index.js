@@ -54,10 +54,7 @@ app.use(session({
   secret: "TOPSECRET",
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: false,
-    sameSite: 'none'      // Required for cross-origin cookies
-  }
+
 }))
 
 app.use(passport.initialize());
