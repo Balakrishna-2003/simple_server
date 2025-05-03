@@ -46,8 +46,7 @@ app.use(cors({
   credentials: true,
 }))
 
-app.use(express.json())
-app.use(urlencoded({ extended: true }))
+
 
 
 app.use(session({
@@ -60,6 +59,8 @@ app.use(session({
     sameSite: 'none'
   }
 }))
+app.use(express.json())
+app.use(urlencoded({ extended: true }))
 
 app.use(passport.initialize());
 app.use(passport.session());
