@@ -208,7 +208,7 @@ app.get("/auth/google/secrets",
     "google",
     {
       successRedirect: origin_url,
-      failureRedirect: "http://localhost:3000/"
+      failureRedirect: "https://simple-server1.vercel.app"
     } ));
 
 passport.use(
