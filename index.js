@@ -55,7 +55,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: false,
     sameSite: 'lax'      // Required for cross-origin cookies
   }
 }))
