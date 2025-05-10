@@ -16,12 +16,13 @@ const saltrounds = 10;
 env.config();
 
 import { createClient } from '@supabase/supabase-js'
+import { parseArgs } from 'util';
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const {data, error} = await supabase.from('hello').select('*');
-console.log(data &&  data.length);
+console.log("data " +data &&  data.length);
 
 
 // const db = new pg.Client({
@@ -44,7 +45,8 @@ app.use(urlencoded({ extended: true }))
 
 app.use(cors({
   origin: process.env.ORIGIN_URL,
-  credentials: true,
+  methods: ['GET','POST'],
+  credentials: true
 }))
 
 
@@ -55,9 +57,9 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: false,
     httpOnly: true,
-    sameSite: 'none'
+    sameSite: 'lax'
   }
 }))
 
@@ -67,26 +69,33 @@ app.use(passport.session());
 
 
 app.get("/", async(req, res) => {
-  const {data, err} = await supabase.from('hello').select('*').filter("username", 'eq','hello');
-  console.log(data &&  data.length);
+  try {
+    
   
-  console.log(req.user+" hello world");
+  const {data, err} = await supabase.from('hello').select('*').filter("username", 'eq','hello');
+  console.log("data 2"+data &&  data.length);
+  
+  console.log("data 3"+req.user+" hello world");
   res.send(req.user+"hello world");
+} catch (error) {
+  console.log(error);
+  
+}
 
 })
 
 app.get("/login", (req, res) => {
   const user = req.user;
-  console.log(user);
-  res.send(req.user);
-  // if(req.user) {
-  //   console.log("hello");
-  //   res.json({success: true, user: req.user});
-  // }else{
-  //   console.log("nooo");
+  console.log("user1 "+user);
+  // res.send(req.user);
+  if(req.user) {
+    console.log("hello");
+    res.json({success: true, user: req.user});
+  }else{
+    console.log("nooo");
     
-  //   res.json({success: false, user: null});
-  // }
+    res.json({success: false, user: null});
+  }
 })
 
 app.get("/logout", (req, res, next) => {
@@ -95,12 +104,18 @@ app.get("/logout", (req, res, next) => {
   if(req.isAuthenticated()){
   req.logout(function(err) {
     if (err) {
+      console.log("logi");
+      
       return next(err);
     }
+    console.log("logiiiii");
+    
     res.status(200).send({success: true});
   })
 }else {
-  res.status(200).send({success: true});
+  console.log("failed");
+  
+  res.status(201).send({success: true});
 }
 });
 
@@ -112,18 +127,18 @@ app.post("/signup" , async (req, res) => {
     const {data, err} = await supabase.from('hello').select().filter("username", 'eq', req.body.username);
     console.log('s');
     
-    console.log(data);
+    console.log("data 3"+data);
     if(data &&  data.length > 0){
       res.redirect(origin_url+'/');
     }else{
       bcrypt.hash(password, saltrounds, async (error, hash) => {
         if(error){
-          console.log(error);
+          console.log("err1"+error);
         }
         if(hash){
           // const data = await db.query("INSERT INTO users VALUES ($1, $2) RETURNING *", [req.body.username, hash]);
           const { data, error } = await supabase.from("hello").insert({username: req.body.username,password: hash}).select();
-          console.log(data);
+          console.log("hii "+data);
           
           const re = { 
             displayName: data[0].username,password: data[0].password 
@@ -131,7 +146,7 @@ app.post("/signup" , async (req, res) => {
           if(data){
             req.login(re, (err) => {
               console.log("hello");
-              console.log(req.user);
+              console.log("req,user " +req.user);
               
               res.redirect(origin_url+'Home');
             })
@@ -144,7 +159,7 @@ app.post("/signup" , async (req, res) => {
     
     
   } catch (error) {
-    console.log(error);
+    console.log("err 2 "+error);
   }
 
 } )
@@ -169,37 +184,68 @@ app.post("/signup" , async (req, res) => {
 // })
 
 app.post("/", async (req, res) => {
-  console.log(req.body);
+  console.log("he "+req.body);
   // const ress = await db.query("INSERT INTO users values($1, $2);", [req.body.username, req.body.password]);
   const { data, error } = await supabase.from('hello').insert({username: req.body.username, password: req.body.password})
   // res.send(`hello world ${req.body.name} message from backend`);
   res.status(200).redirect(origin_url+"Home")
 })
 
-app.post("/login", (req,res, next) => {
+// app.post("/login", passport.authenticate("local", {
+//   successMessage: "hello world",
+//   failureMessage: "failed",
+// }));
+
+app.post("/login", (req, res, next) => {
+
   passport.authenticate("local", (err, user, info) => {
-    console.log('us');
+    console.log("yess iam here");
     
-    console.log(user);
-    
-    if(user) {
-      const re = { displayName: user.username, password: user.password};
-      // Authentication succeeded
-      req.login(re, (err) => {
-        if(err) console.log(err);
-        console.log("yes");
-        console.log(req.user);
-        // res.send(JSON.parse(req));
-        res.status(200).redirect(origin_url+"Home");
-        // res.send("login success");
-      })
-    }else{
-      console.log('hhjkkj');
-      // re.send("login failed");
-      res.redirect(origin_url+'Login');
-    };
+    if (err) {
+      console.error("Auth error:", err);
+      return res.status(500).json({ success: false, error: "Authentication failed" });
+    }
+
+    if (!user) {
+      return res.status(401).json({ success: false, error: "Invalid credentials" });
+    }
+
+    req.login(user, (err) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ success: false, error: "Login failed" });
+      }
+
+      return res.status(200).json({ success: true, user });
+    });
   })(req, res, next);
-})
+});
+
+
+// app.post("/login", (req,res, next) => {
+//   passport.authenticate("local", (err, user, info) => {
+//     console.log('us');
+    
+//     console.log("suer "+user);
+    
+//     if(user) {
+//       const re = { displayName: user.username, password: user.password};
+//       // Authentication succeeded
+//       req.login(re, (err) => {
+//         if(err) console.log("err3 "+err);
+//         console.log("yes");
+//         console.log("re 2 "+req.user);
+//         // res.send(JSON.parse(req));
+//         res.status(200).redirect(origin_url+"Home");
+//         // res.send("login success");
+//       })
+//     }else{
+//       console.log('hhjkkj');
+//       // re.send("login failed");
+//       res.redirect(origin_url+'Login');
+//     };
+//   })(req, res, next);
+// })
 
 app.get("/auth/google",
   passport.authenticate("google", {
@@ -221,23 +267,29 @@ passport.use(
   new Strategy(async function verify(username, password, cb) {
     // return cb(null, username);
     try {
+      console.log('username '+username+" password "+ password);
+      
       // const result = await db.query("SELECT * FROM users WHERE name = $1 ", [username]);
       console.log('sd');
       
       const { data, error } = await supabase.from('hello').select().filter('username', 'eq',username);
+      console.log("data 5 "+data);
       console.log(data);
       if (data && data.length > 0) {
         const user = data[0];
         const storedHashedPassword = user.password;
-        console.log(user);
+        console.log("user 5"+user);
         bcrypt.compare(password, storedHashedPassword, (err, valid) => {
           if(err){
-            console.log(err);
+            console.log("err 6 "+err);
             return cb(err);
           }else{
             if(valid){
+              console.log("errror");
               return cb(null, user);
             }else{
+              console.log("errrdor");
+
               return cb(null, false);
             }
           }
@@ -260,7 +312,8 @@ passport.use(
           return cb("user not found");
       }
     } catch (err) {
-      console.log(err);
+      console.log("err 7 "+err);
+      return cb(err);
     }
   })
 );
@@ -273,7 +326,7 @@ passport.use(
     callbackURL: process.env.API_URL+"/auth/google/secrets",
     userprofileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
   },async (accessToken, refreshToken, profile, cb) => {
-    console.log(profile);
+    console.log("profile 1 "+profile);
     console.log("he");
     return cb(null, profile);
   })
@@ -288,6 +341,6 @@ passport.deserializeUser((user, cb) => {
 });
 
 app.listen(port, () => {
-  console.log(dirname);
+  console.log("dir "+dirname);
   console.log(`http://localhost:${port}`)
 })
